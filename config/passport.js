@@ -47,7 +47,7 @@ module.exports = function(passport){
     passport.use(new FacebookStrategy({
             clientID: keys.facebookClientID,
             clientSecret: keys.facebookClientSecret,
-            callbackURL: "http://localhost:8080/auth/facebook/callback"
+            callbackURL: "https://radiant-wave-93551.herokuapp.com/auth/facebook/callback"
         },
         function(accessToken, refreshToken, profile, cb) {
             console.log(JSON.stringify(profile,undefined,2));
