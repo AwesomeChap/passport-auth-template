@@ -1,5 +1,8 @@
 const express = require('express');
 const router = express.Router();
+const passport = require('passport');
+const bcrypt = require('bcryptjs');
+const mongoose = require('mongoose');
 
 router.get('/',(req, res)=>{
    res.render('index/welcome');

@@ -7,27 +7,8 @@ const passport = require('passport');
 const path = require('path');
 const bodyParser = require('body-parser');
 
-// Load User Model
-require('./models/User');
-
-// Passport Config
-require('./config/passport')(passport);
-
-// Load Routes
-const index = require('./routes/index');
-const auth = require('./routes/auth');
-
-// Load Keys
-const keys = require('./config/keys');
-
-// Map global promises
-mongoose.Promise = global.Promise;
-// Mongoose Connect
-mongoose.connect(keys.mongoURI)
-    .then(() => console.log('MongoDB Connected'))
-    .catch(err => console.log(err));
-
 const app = express();
+
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
@@ -45,22 +26,13 @@ app.use(session({
     saveUninitialized: false
 }));
 
-// Passport Middleware
-app.use(passport.initialize());
-app.use(passport.session());
+const index = require('./routes/index');
+const auth = require('./routes/auth');
 
-// Set global vars
-app.use((req, res, next) => {
-    res.locals.user = req.user || null;
-    next();
-});
-
-// Use Routes
 app.use('/',index);
 app.use('/auth', auth);
 
-
-const port = process.env.PORT || 8080;
+const port = process.env.PORT || 3000;
 
 app.listen(port, () => {
     console.log(`Server started on port ${port}`)
