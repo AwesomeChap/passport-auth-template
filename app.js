@@ -6,6 +6,17 @@ const session = require('express-session');
 const passport = require('passport');
 const path = require('path');
 const bodyParser = require('body-parser');
+const keys = require('./config/keys');
+
+const {mongoURI} = keys;
+
+mongoose.connect(mongoURI).then(()=>{
+    console.log('Connected to Database!');
+}).catch((e)=>{
+    console.log(e);
+});
+
+require('./config/passport')(passport);
 
 const app = express();
 
@@ -25,6 +36,14 @@ app.use(session({
     resave: false,
     saveUninitialized: false
 }));
+
+app.use(passport.initialize());
+app.use(passport.session());
+
+app.use((req,res,next)=>{
+    res.locals.user = req.user || null;
+    next();
+});
 
 const index = require('./routes/index');
 const auth = require('./routes/auth');
